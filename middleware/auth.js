@@ -4,7 +4,7 @@ var getLoggedInUser = function getLoggedInUser (req, res, next) {
   var authHeader = req.header('Authorization');
   tokenUtils.verify(authHeader)
   .then(function (user) {
-    req.principal = user;
+    req.subject = user;
     next();
   })
   .catch(function(err) {

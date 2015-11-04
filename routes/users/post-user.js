@@ -8,7 +8,7 @@ var postUser = function postUser (req, res, next) {
     });
   }
 
-  if (!permissions.createPermitted(req.principal.sub, req.body.id)) {
+  if (!permissions.createPermitted(req.subject.sub, req.body.id)) {
     return res.status(403).json({
       message: 'Unauthorized operation'
     });
@@ -25,6 +25,11 @@ var postUser = function postUser (req, res, next) {
 
     newUser = new User(req.body);
     newUser._id = req.body.id;
+
+    // Add profile metadata
+    newUser.meta = {
+      creator_delegate_id: req.subject.delegate
+    };
 
     newUser.save(function (err) {
       if (err) {
